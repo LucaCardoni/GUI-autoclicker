@@ -38,6 +38,7 @@ def get_mouse_position():
 
 def close():
     try:
+        guidelst.stop()
         listener.stop()
         k_listener.stop()
     except:
@@ -60,14 +61,28 @@ def choosepositions():
 on = False
 
 def getpositions():
-    global on
+    global on, overtext
     on = not on
     if on:
         posbtn.config(text="Stop recording")
         threading.Thread(target=append_mouse_position, daemon=True).start()
+        overtext = Toplevel(root)
+        overtext.overrideredirect(True)
+        overtext.attributes("-topmost", True)
+        overtext.attributes('-alpha', 0.8)
+        def on_move(x, y):
+            overtext.geometry(f"+{int(x/1.5)-105}+{int(y/1.5)-40}")
+        def start_guidelst():
+            global guidelst
+            with mouse.Listener(on_move=on_move) as guidelst:
+                guidelst.join()
+        Label(overtext, text="Ctrl + click\nto record position").pack()
+        threading.Thread(target=start_guidelst).start()
     else:
         listener.stop()
         k_listener.stop()
+        guidelst.stop()
+        overtext.destroy()
         on = False
         posbtn.config(text="Record positions")
 
