@@ -1,4 +1,4 @@
-git# Autoclicker GUI Application
+# Autoclicker GUI Application
 
 The Autoclicker is a graphical user interface (GUI) application built using the tkinter library in Python. It allows users to set up and control an autoclicker for automating mouse clicks on their computer.
 
